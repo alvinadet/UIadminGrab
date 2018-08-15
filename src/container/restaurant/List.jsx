@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 export default class List extends Component {
   state = {
     data: [],
@@ -7,6 +8,7 @@ export default class List extends Component {
   };
 
   getData = () => {
+    console.log(this.state.data);
     axios.get('http://localhost:8000/api/restaurant').then(res => {
       console.log(res.data);
       this.setState({
@@ -14,6 +16,12 @@ export default class List extends Component {
         loading: true
       });
       console.log(this.state.data, '>>>>>>');
+    });
+  };
+
+  dataDelete = id => {
+    axios.delete(`http://localhost:8000/api/restaurant/${id}`).then(res => {
+      this.getData();
     });
   };
 
@@ -26,22 +34,24 @@ export default class List extends Component {
         {this.state.loading ? (
           <ul>
             {this.state.data.map(datum => {
-              return <li>{datum.name}</li>;
+              return (
+                <div>
+                  <Link to={`/restaurant/${datum._id}/update`}>
+                    <li>{datum.name}</li>
+                  </Link>
+                  <button
+                    onClick={() => {
+                      this.dataDelete(datum._id);
+                    }}>
+                    Delete
+                  </button>
+                </div>
+              );
             })}
           </ul>
         ) : (
           <h1>Loading ...</h1>
         )}
-      </div>
-    );
-  }
-}
-
-class Header extends Component {
-  render() {
-    return (
-      <div>
-        <h1>KA</h1>
       </div>
     );
   }

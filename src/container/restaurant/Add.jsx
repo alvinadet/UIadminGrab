@@ -18,7 +18,9 @@ export default class Add extends Component {
         link: true
       })
       .then(res => {
-        console.log(res);
+        this.setState({
+          link: true
+        });
       });
   };
 
@@ -58,7 +60,7 @@ export default class Add extends Component {
           </button>
         </div>
 
-        {this.state.link ? <h2>Say</h2> : <h1>Hallo</h1>}
+        {this.state.link ? <Redirect to="/restaurant" /> : <h1>Hallo</h1>}
       </div>
     );
   }
