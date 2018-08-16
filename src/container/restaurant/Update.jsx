@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import { Redirect } from 'react-router-dom';
+import { Button, Checkbox, Form } from 'semantic-ui-react';
+import { Link } from 'react-router-dom';
 
 export default class Update extends Component {
   state = {
@@ -13,20 +15,22 @@ export default class Update extends Component {
   dataGet = () => {
     console.log(this.props.match.params.id);
     axios
-      .get(`http://localhost:8000/api/restaurant/${this.props.match.params.id}`)
+      .get(
+        `http://localhost:8000/api/restaurants/${this.props.match.params.id}`
+      )
       .then(res => {
         console.log(res, '>>>>ini res id');
         this.setState({
-          name: res.data[0].name,
-          address: res.data[0].address,
-          image: res.data[0].image
+          name: res.data.name,
+          address: res.data.address,
+          image: res.data.image
         });
       });
   };
 
   dataPut = id => {
     axios
-      .put(`http://localhost:8000/api/restaurant/${id}`, {
+      .put(`http://localhost:8000/api/restaurants/${id}`, {
         name: this.state.name,
         image: this.state.image,
         address: this.state.address
@@ -52,34 +56,48 @@ export default class Update extends Component {
   render() {
     return (
       <div>
-        <div>
-          <input
-            onChange={this.handleChange}
-            name="name"
-            value={this.state.name}
-            placeholder="Input"
-          />
-          <input
-            onChange={this.handleChange}
-            name="image"
-            value={this.state.image}
-            placeholder="image"
-          />
-          <input
-            onChange={this.handleChange}
-            name="address"
-            value={this.state.address}
-            placeholder="address"
-          />
-          <button
+        <h1>Update Data</h1>
+        <Form>
+          <Form.Field>
+            <label>Nama Toko</label>
+            <input
+              placeholder="Nama Toko"
+              onChange={this.handleChange}
+              name="name"
+              value={this.state.name}
+            />
+          </Form.Field>
+          <Form.Field>
+            <label>Image</label>
+            <input
+              placeholder="Image"
+              onChange={this.handleChange}
+              name="image"
+              value={this.state.image}
+            />
+          </Form.Field>
+          <Form.Field>
+            <label>Alamat</label>
+            <input
+              placeholder="address"
+              onChange={this.handleChange}
+              name="address"
+              value={this.state.address}
+            />
+          </Form.Field>
+          <Button
+            type="submit"
             onClick={() => {
               this.dataPut(this.props.match.params.id);
             }}>
             Edit
-          </button>
-        </div>
+          </Button>
+          <Button as={Link} to="/restaurant">
+            Cancel
+          </Button>
+        </Form>
 
-        {this.state.link ? <Redirect to="/restaurant" /> : <h1>Hallo</h1>}
+        {this.state.link ? <Redirect to="/restaurant" /> : ''}
       </div>
     );
   }

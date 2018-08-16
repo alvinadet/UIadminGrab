@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
+import { Header, Table, Rating, Grid, Button } from 'semantic-ui-react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
-import { Header, Table, Rating, Grid, Button } from 'semantic-ui-react';
-export default class List extends Component {
+
+export default class ListFoods extends Component {
   state = {
     data: [],
     loading: false
@@ -10,7 +11,7 @@ export default class List extends Component {
 
   getData = () => {
     console.log(this.state.data);
-    axios.get('http://localhost:8000/api/restaurants').then(res => {
+    axios.get(`http://localhost:8000/api/foods`).then(res => {
       console.log(res.data);
       this.setState({
         data: res.data,
@@ -21,7 +22,7 @@ export default class List extends Component {
   };
 
   dataDelete = id => {
-    axios.delete(`http://localhost:8000/api/restaurants/${id}`).then(res => {
+    axios.delete(`http://localhost:8000/api/foods/${id}`).then(res => {
       this.getData();
     });
   };
@@ -32,7 +33,7 @@ export default class List extends Component {
   render() {
     return (
       <div>
-        <h1>List Toko</h1>
+        <p>List Makanan</p>
         <Table celled padded>
           <Table.Header>
             <Table.Row>
@@ -54,8 +55,12 @@ export default class List extends Component {
                     </Header>
                   </Table.Cell>
                   <Table.Cell singleLine>{datum.name}</Table.Cell>
-                  <Table.Cell>{datum.address}</Table.Cell>
-
+                  <Table.Cell>{datum.price}</Table.Cell>
+                  <Table.Cell>
+                    <Button as={Link} to={`/restaurant/${datum._id}/foods`}>
+                      Lihat makanan
+                    </Button>
+                  </Table.Cell>
                   <Table.Cell>
                     <Button as={Link} to={`/restaurant/${datum._id}/update`}>
                       Edit
@@ -65,15 +70,6 @@ export default class List extends Component {
                         this.dataDelete(datum._id);
                       }}>
                       Hapus
-                    </Button>
-                  </Table.Cell>
-                  <Table.Cell>
-                    <Button as={Link} to={`/restaurant/${datum._id}/foods`}>
-                      Lihat
-                    </Button>
-
-                    <Button as={Link} to={`/restaurant/${datum._id}/foods/add`}>
-                      Tambahkan
                     </Button>
                   </Table.Cell>
                 </Table.Row>

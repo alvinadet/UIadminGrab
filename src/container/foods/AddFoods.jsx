@@ -2,20 +2,21 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import { Redirect, Link } from 'react-router-dom';
 import { Button, Checkbox, Form } from 'semantic-ui-react';
-export default class Add extends Component {
+
+export default class AddFoods extends Component {
   state = {
     name: '',
     image: '',
-    address: '',
+    price: '',
     link: false
   };
 
-  dataPost = () => {
+  dataPost = id => {
     axios
-      .post('http://localhost:8000/api/restaurants', {
+      .post(`http://localhost:8000/api/restaurants/${id}/foods`, {
         name: this.state.name,
         image: this.state.image,
-        address: this.state.address,
+        price: this.state.address,
         link: true
       })
       .then(res => {
@@ -35,10 +36,10 @@ export default class Add extends Component {
     return (
       <div>
         <div>
-          <h1>Tambah Data</h1>
+          <h1>Tambahkan Makanan</h1>
           <Form>
             <Form.Field>
-              <label>Nama Toko</label>
+              <label>Nama Makanan</label>
               <input
                 placeholder="Nama Toko"
                 onChange={this.handleChange}
@@ -56,9 +57,10 @@ export default class Add extends Component {
               />
             </Form.Field>
             <Form.Field>
-              <label>Alamat</label>
+              <label>Harga</label>
               <input
                 placeholder="address"
+                type="number"
                 onChange={this.handleChange}
                 name="address"
                 value={this.state.address}
@@ -67,17 +69,23 @@ export default class Add extends Component {
             <Button
               type="submit"
               onClick={() => {
-                this.dataPost();
+                this.dataPost(this.props.match.params.id);
               }}>
               Submit
             </Button>
-            <Button as={Link} to="/restaurant">
+            <Button
+              as={Link}
+              to={`/restaurant/${this.props.match.params.id}/foods`}>
               Cancel
             </Button>
           </Form>
         </div>
 
-        {this.state.link ? <Redirect to="/restaurant" /> : ''}
+        {this.state.link ? (
+          <Redirect to={`/restaurant/${this.props.match.params.id}/foods`} />
+        ) : (
+          ''
+        )}
       </div>
     );
   }
